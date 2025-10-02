@@ -31,7 +31,9 @@ export class AuthService {
     }
     const result = await this.generatePasswordHash(dto.password);
     dto.password = result;
-    return this.userService.create(dto);
+    const newUser = await this.userService.create(dto);
+    console.log({ newUser });
+    return newUser;
   }
 
   private async generatePasswordHash(

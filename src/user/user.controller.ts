@@ -15,15 +15,14 @@ import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
 import { UserResponseDto } from './dto/user-response.dto';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { Serialize } from '../interceptors/serialize.interceptor';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { User } from './user.entity';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { Authenticated } from 'src/decorators/auth.decorator';
+import { Authenticated } from '../decorators/auth.decorator';
 
-interface ISession {
+export interface ISession {
   userId: number;
 }
 
@@ -56,14 +55,6 @@ export class UserController {
   me(@CurrentUser() user: User) {
     return user;
   }
-  //option 2
-  // @UseInterceptors(CurrentUserInterceptor)
-  // @Get('me')
-  // me(@Request() request: any) {
-  //
-  //   return request?.currentUser
-  // }
-
   @Post('signout')
   signout(@Session() session: ISession) {
     session.userId = null;

@@ -7,7 +7,7 @@ export interface IRepository {
   findById(id: number): Promise<User>;
   findByEmail(email: string): Promise<User>;
   find(): Promise<User[]>;
-  create(dto: Partial<User>): User;
+  create(dto: Partial<User>): Promise<User>;
   update(id: number, dto: Partial<User>): Promise<User>;
   remove(id: number): Promise<User>;
 }
@@ -34,10 +34,11 @@ export class UserService implements IRepository {
   async find(): Promise<User[]> {
     return this.repo.find();
   }
-  create(dto: Partial<User>): User {
+  async create(dto: Partial<User>): Promise<User> {
     const user = this.repo.create(dto);
-    this.repo.save(user);
-    return user;
+    const newUser = await this.repo.save(user);
+    console.log({ newUser }, 'new user created');
+    return newUser;
   }
   async update(id: number, dto: Partial<User>): Promise<User> {
     const user = await this.findById(id);
@@ -46,6 +47,7 @@ export class UserService implements IRepository {
     }
     Object.assign(user, dto);
     this.repo.save(user);
+
     return user;
   }
   async remove(id: number): Promise<User> {

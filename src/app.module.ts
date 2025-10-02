@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { ReportModule } from './report/report.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/user.entity';
 import { Report } from './report/report.entity';
-
+import { APP_PIPE } from '@nestjs/core';
+var cookieSession = require('cookie-session');
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -16,5 +17,29 @@ import { Report } from './report/report.entity';
     UserModule,
     ReportModule,
   ],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+      }),
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule {
+  /**
+   * 
+   *so this configure function is going to be called automatically whenever our application starts
+    listening for incoming traffic.
+    So inside of here we can set up some middleware that will run on every single incoming request.
+   */
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(
+        cookieSession({
+          keys: ['asdfasdf'],
+        }),
+      )
+      .forRoutes('*');
+  }
+}
