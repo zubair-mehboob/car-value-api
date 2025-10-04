@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IReport } from './report.service';
+import { User } from 'src/user/user.entity';
 
 @Entity()
 export class Report implements IReport {
@@ -19,4 +20,9 @@ export class Report implements IReport {
   year: number;
   @Column()
   mileage: number;
+  @ManyToOne(() => User, (user) => user.reports)
+  user: User;
+
+  @Column({ default: false })
+  approved: boolean;
 }

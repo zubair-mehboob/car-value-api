@@ -1,4 +1,10 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsLatitude,
+  IsLongitude,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { IReport } from '../report.service';
 
 export class ReportDTO implements IReport {
@@ -6,9 +12,9 @@ export class ReportDTO implements IReport {
   make: string;
   @IsNumber()
   model: number;
-  @IsOptional()
+  @IsLatitude()
   latitude: number;
-  @IsOptional()
+  @IsLongitude()
   longitude: number;
   @IsNumber()
   price: number;
