@@ -26,6 +26,8 @@ export class User {
   @OneToMany(() => Report, (report) => report.user)
   reports: Report[];
 
+  @Column({ default: false })
+  isAdminUser: boolean;
   @AfterInsert()
   logInsert() {
     this.logger.log(`Inserted User with email: ${this.email}`);

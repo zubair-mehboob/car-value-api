@@ -1,6 +1,8 @@
 import {
+  IsBoolean,
   IsEmail,
   IsNumber,
+  IsOptional,
   IsString,
   MaxLength,
   MinLength,
@@ -14,4 +16,8 @@ export class UserDto {
   @MinLength(5)
   @MaxLength(8)
   password: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isAdminUser: boolean;
 }

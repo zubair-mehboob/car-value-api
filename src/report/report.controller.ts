@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import {
@@ -23,6 +24,10 @@ import { User } from 'src/user/user.entity';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { GetReportDTO } from './dto/get-report.dto';
 
+import { Authorized } from 'src/guards/authorized.decorator';
+import { AuthorizationGuard } from 'src/guards/authorization.guard';
+import { ApproveReportDTO } from './dto/approve-report.dto';
+
 @Authenticated()
 @UseInterceptors(ResponseInterceptor)
 @Controller('reports')
@@ -30,6 +35,7 @@ export class ReportController {
   constructor(
     @Inject(REPORT_SERVICE) private readonly reportService: IReportService,
   ) {}
+  @Authorized()
   @Get()
   getReport(@Query() query: Partial<ReportDTO>) {
     return this.reportService.getAll(query);
@@ -47,8 +53,9 @@ export class ReportController {
     return this.reportService.update(id, dto);
   }
 
-  @Patch('/:id')
-  approved(@Param('id') id: number, @Body() dto: IApproval) {
-    this.reportService.approval(id, dto);
+  @Authorized()
+  @Patch('/apprvoed/:id')
+  approved(@Param('id') id: number, @Body() dto: ApproveReportDTO) {
+    return this.reportService.approval(id, dto);
   }
 }

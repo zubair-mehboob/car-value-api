@@ -4,8 +4,11 @@ import { ReportModule } from './report/report.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/user.entity';
 import { Report } from './report/report.entity';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthorizationGuard } from './guards/authorization.guard';
+import { CurrentUserMiddleware } from './middleware/current-user.middleware';
+
 var cookieSession = require('cookie-session');
 @Module({
   imports: [
@@ -35,6 +38,11 @@ var cookieSession = require('cookie-session');
         whitelist: true,
       }),
     },
+    AuthorizationGuard,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthorizationGuard,
+    // },
   ],
 })
 export class AppModule {
@@ -50,6 +58,7 @@ export class AppModule {
         cookieSession({
           keys: ['asdfasdf'],
         }),
+        CurrentUserMiddleware,
       )
       .forRoutes('*');
   }

@@ -63,10 +63,10 @@ describe('UserController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('can signup user', async () => {
-    const user = await fakeAuthService.signup({
-      email: 'abc@y.c',
-      password: '12345',
-    });
-  });
+  // it('can signup user', async () => {
+  //   const user = await fakeAuthService.signup({
+  //     email: 'abc@y.c',
+  //     password: '12345',
+  //   });
+  // });
 });

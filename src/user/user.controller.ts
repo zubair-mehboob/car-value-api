@@ -17,6 +17,7 @@ import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './user.entity';
 import { Authenticated } from '../decorators/auth.decorator';
+import { Authorized } from 'src/guards/authorized.decorator';
 
 export interface ISession {
   userId: number;
@@ -32,6 +33,7 @@ export class UserController {
 
   @Post('/signin')
   async signin(@Body() dto: UserDto, @Session() session: ISession) {
+    console.log({ dto, session }, 'SIGNIN');
     const user = await this.authService.signin(dto);
     session.userId = user.id;
     return user;
@@ -46,6 +48,7 @@ export class UserController {
   //option 1
   // @UseGuards(AuthGuard)
   @Authenticated()
+  @Authorized()
   @Get('me')
   me(@CurrentUser() user: User) {
     return user;

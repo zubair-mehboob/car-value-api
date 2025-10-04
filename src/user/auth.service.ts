@@ -13,6 +13,7 @@ export class AuthService {
   constructor(private readonly userService: UserService) {}
   async signin(dto: UserDto) {
     const user = await this.userService.findByEmail(dto.email);
+    console.log({ dto, user });
     if (!user) {
       throw new NotFoundException('User not found');
     }
